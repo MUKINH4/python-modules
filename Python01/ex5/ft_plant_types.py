@@ -65,14 +65,16 @@ class Flower(Plant):
 
 
 class Tree(Plant):
-    def __init__(self, name: str, height: float, plant_age: int, trunk_diameter: float):
+    def __init__(self, name: str, height: float, plant_age: int,
+                 trunk_diameter: float):
         super().__init__(name, height, plant_age)
         self._trunk_diameter = trunk_diameter
         print("\n=== Tree")
 
     def produce_shade(self):
         print("[asking the oak to produce shade]")
-        print(f"Tree {self.name} now produces a shade of {self.get_height()}cm long and {self._trunk_diameter}cm wide.")
+        print(f"Tree {self.name} now produces a shade of",
+              f"{self.get_height()}cm long and {self._trunk_diameter}cm wide.")
 
     def show(self):
         super().show()
@@ -82,10 +84,10 @@ class Tree(Plant):
 class Vegetable(Plant):
     def __init__(self, name: str, height: float, plant_age: int,
                  harvest_season: str, nutritional_value: int):
-            super().__init__(name, height, plant_age)
-            self._harvest_season = harvest_season
-            self._nutritional_value = nutritional_value
-            print("\n=== Vegetable")
+        super().__init__(name, height, plant_age)
+        self._harvest_season = harvest_season
+        self._nutritional_value = nutritional_value
+        print("\n=== Vegetable")
 
     def show(self):
         super().show()
@@ -101,6 +103,7 @@ class Vegetable(Plant):
         print(f"[make tomato grow and age for {grow_days} days")
         self.set_age(self.get_age() + grow_days)
         self._nutritional_value += grow_days
+
 
 def main():
     print("=== Garden Plant Types ===")

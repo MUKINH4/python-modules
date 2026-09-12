@@ -19,7 +19,7 @@ class Plant:
 
 
 def main() -> None:
-    plants_dict: list[dict[str, any]] = [
+    plants_dict: list[dict] = [
         {"name": "Rose", "height": 25.0, "plant_age": 30},
         {"name": "Oak", "height": 200.0, "plant_age": 365},
         {"name": "Cactus", "height": 5.0, "plant_age": 90},
@@ -28,8 +28,7 @@ def main() -> None:
     ]
     print("=== Plant Factory Output ===")
     for plant in plants_dict:
-        plant = Plant(plant["name"], plant["height"], plant["plant_age"])
-
+        new_plant = Plant(plant["name"], plant["height"], plant["plant_age"])
 
 if __name__ == "__main__":
     main()

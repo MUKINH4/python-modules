@@ -5,19 +5,23 @@ class Plant:
             self._grow_count = 0
             self._age_count = 0
             self._show_count = 0
+            self._shade_count = 0
 
-        def increment_count(self, func_name: str):
+        def increment_count(self, func_name: str) -> None:
             if func_name == 'grow':
                 self._grow_count += 1
             elif func_name == 'age':
                 self._age_count += 1
             elif func_name == 'show':
                 self._show_count += 1
+            elif func_name == 'produce_shade':
+                self._shade_count += 1
             else:
                 return
 
         def show_stats(self) -> None:
-            print(f"{self._grow_count} grow, {self._age_count} age, {self._show_count} show")
+            print(f"Stats: {self._grow_count} grow, {self._age_count} age,",
+                  f"{self._show_count} show")
 
     def __init__(self, name: str, height: float, plant_age: int) -> None:
         self.name = name
@@ -66,7 +70,9 @@ class Plant:
 
     @classmethod
     def create_anonymous_plant(cls):
+        print("\n=== Anonymous")
         return cls("Unknown plant", 0.0, 0)
+
 
 class Flower(Plant):
 
@@ -75,15 +81,19 @@ class Flower(Plant):
         super().__init__(name, height, plant_age)
         self._color = color
         self._bloomed = False
-        print("\n=== Flower")
 
     def get_color(self) -> str:
         return self._color
 
     def grow(self):
+        self.stats.increment_count('grow')
         print(f"[asking the {self.name.lower()} to grow and bloom]")
-        self.set_height(self.get_height + 8)
+        self._height = self.get_height() + 8
         self.bloom()
+
+    def show_stats(self) -> None:
+        print(f"[statistics for {self.name.capitalize()}]")
+        self.show_stats()
 
     def bloom(self) -> None:
         if not self._bloomed:
@@ -95,18 +105,26 @@ class Flower(Plant):
         if not self._bloomed:
             print(f" {self.name} has not bloomed yet")
         else:
-            print(f"{self.name} is blooming beautifully!")
+            print(f" {self.name} is blooming beautifully!")
 
 
 class Tree(Plant):
-    def __init__(self, name: str, height: float, plant_age: int, trunk_diameter: float):
+    def __init__(self, name: str, height: float, plant_age: int,
+                 trunk_diameter: float):
         super().__init__(name, height, plant_age)
         self._trunk_diameter = trunk_diameter
         print("\n=== Tree")
 
     def produce_shade(self):
-        print("[asking the oak to produce shade]")
-        print(f"Tree {self.name} now produces a shade of {self.get_height()}cm long and {self._trunk_diameter}cm wide.")
+        print(f"[asking the {self.name.lower()} to produce shade]")
+        print(f"Tree {self.name.capitalize()} now produces a shade of",
+              f"{self.get_height()}cm long and {self._trunk_diameter}cm wide.")
+        self.stats.increment_count("produce_shade")
+
+    def show_stats(self) -> None:
+        print(f"[statistics for {self.name.capitalize()}]")
+        self.stats.show_stats()
+        print(f" {self.stats._shade_count} shade")
 
     def show(self):
         super().show()
@@ -116,10 +134,10 @@ class Tree(Plant):
 class Vegetable(Plant):
     def __init__(self, name: str, height: float, plant_age: int,
                  harvest_season: str, nutritional_value: int):
-            super().__init__(name, height, plant_age)
-            self._harvest_season = harvest_season
-            self._nutritional_value = nutritional_value
-            print("\n=== Vegetable")
+        super().__init__(name, height, plant_age)
+        self._harvest_season = harvest_season
+        self._nutritional_value = nutritional_value
+        print("\n=== Vegetable")
 
     def show(self):
         super().show()
@@ -132,16 +150,55 @@ class Vegetable(Plant):
     def grow(self, grow_days):
         for _ in range(grow_days):
             self.set_height(self.get_height() + 2.1)
-        print(f"[make tomato grow and age for {grow_days} days")
+        print(f"[make {self.name.lower()} grow and age for {grow_days} days")
         self.set_age(self.get_age() + grow_days)
         self._nutritional_value += grow_days
+
+    def show_stats(self):
+        print(f"[statistics for {self.name}]")
+        self.stats.show_stats()
 
 
 class Seed(Flower):
 
-    def __init__(self, name: str, height: float, plant_age: str, color: str, seeds: int = 0):
+    def __init__(self, name: str, height: float, plant_age: int,
+                 color: str, seeds: int = 0):
         super().__init__(name, height, plant_age, color)
         self._seeds = seeds
+        print("\n=== Seed")
+
+    def set_seeds(self, seeds: int) -> None:
+        self._seeds = seeds
+
+    def get_seeds(self) -> int:
+        return self._seeds
+
+    def grow_age_and_bloom(self) -> None:
+        self.grow()
+        self.age()
+        self.bloom()
+
+    def set_height(self, height):
+        self._height = height
+
+    def grow(self) -> None:
+        self.set_height(self.get_height() + 30.0)
+        self.stats.increment_count('grow')
+
+    def set_age(self, age) -> None:
+        self.plant_age = age
+
+    def age(self):
+        self.set_age(self.get_age() + 20)
+        self.stats.increment_count('age')
+
+    def bloom(self):
+        super().bloom()
+        self.set_seeds(self.get_seeds() + 42)
+
+    def show(self):
+        super().show()
+        print(f" Seeds: {self._seeds}")
 
 
 def main():
@@ -150,14 +207,30 @@ def main():
     Plant.more_than_year(30)
     Plant.more_than_year(400)
 
-    flower: Flower = Flower("Rose", 15.0, 10, "red")
-    flower.show()
-    flower.stats.show_stats()
+    print("\n=== Flower")
+    rose: Flower = Flower("Rose", 15.0, 10, "red")
+    rose.show()
+    rose.stats.show_stats()
+    rose.grow()
+    rose.show()
+    rose.stats.show_stats()
+
+    oak: Tree = Tree("Oak", 200.0, 365, 5.0)
+    oak.show()
+    oak.show_stats()
+    oak.produce_shade()
+    oak.show_stats()
+
+    sunflower: Seed = Seed("Sunflower", 80.0, 45, "yellow", 0)
+    sunflower.show()
+    sunflower.grow_age_and_bloom()
+    sunflower.show()
+    sunflower.stats.show_stats()
 
     anonymous = Plant.create_anonymous_plant()
     anonymous.show()
+    anonymous.stats.show_stats()
 
 
 if __name__ == "__main__":
     main()
-

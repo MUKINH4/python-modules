@@ -18,7 +18,7 @@ class Plant:
         self.plant_age += 1
 
 
-def main():
+def main() -> None:
     print('=== Garden Plant Growth ===')
     plant = Plant('Rose', 25, 30)
     plant.show()

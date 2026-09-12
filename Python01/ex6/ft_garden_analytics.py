@@ -16,10 +16,14 @@ class Plant:
             else:
                 return
 
+        def show_stats(self) -> None:
+            print(f"{self._grow_count} grow, {self._age_count} age, {self._show_count} show")
+
     def __init__(self, name: str, height: float, plant_age: int) -> None:
         self.name = name
         self._height = height
         self._plant_age = plant_age
+        self.stats = self.Stats()
 
     def set_height(self, height: float):
         if (height < 0):
@@ -46,12 +50,15 @@ class Plant:
     def show(self) -> None:
         print(f'{self.name}: {round(self.get_height(), 1)}cm,',
               f'{self.get_age()} days old')
+        self.stats.increment_count('show')
 
     def grow(self) -> None:
         self._height += 0.8
+        self.stats.increment_count('grow')
 
     def age(self) -> None:
         self._plant_age += 1
+        self.stats.increment_count('age')
 
     @staticmethod
     def more_than_year(days: int):
@@ -73,18 +80,22 @@ class Flower(Plant):
     def get_color(self) -> str:
         return self._color
 
+    def grow(self):
+        print(f"[asking the {self.name.lower()} to grow and bloom]")
+        self.set_height(self.get_height + 8)
+        self.bloom()
+
     def bloom(self) -> None:
         if not self._bloomed:
-            self.show()
-            print(f" {self.name} has not bloomed yet")
-            print("[asking the rose to bloom]")
             self._bloomed = True
-        self.show()
-        print(f"{self.name} is blooming beautifully!")
 
     def show(self) -> None:
         super().show()
         print(f" Color: {self.get_color()}")
+        if not self._bloomed:
+            print(f" {self.name} has not bloomed yet")
+        else:
+            print(f"{self.name} is blooming beautifully!")
 
 
 class Tree(Plant):
@@ -125,11 +136,23 @@ class Vegetable(Plant):
         self.set_age(self.get_age() + grow_days)
         self._nutritional_value += grow_days
 
+
+class Seed(Flower):
+
+    def __init__(self, name: str, height: float, plant_age: str, color: str, seeds: int = 0):
+        super().__init__(name, height, plant_age, color)
+        self._seeds = seeds
+
+
 def main():
     print("=== Garden statistics ===")
     print("=== Check year-old")
     Plant.more_than_year(30)
     Plant.more_than_year(400)
+
+    flower: Flower = Flower("Rose", 15.0, 10, "red")
+    flower.show()
+    flower.stats.show_stats()
 
     anonymous = Plant.create_anonymous_plant()
     anonymous.show()

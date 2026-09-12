@@ -18,7 +18,7 @@ class Plant:
         self.plant_age += 1
 
 
-def main():
+def main() -> None:
     plants_dict: list[dict[str, any]] = [
         {"name": "Rose", "height": 25.0, "plant_age": 30},
         {"name": "Oak", "height": 200.0, "plant_age": 365},

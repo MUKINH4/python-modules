@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 def calculate_distance(first_coord: tuple[float, float, float],
                        second_coord: tuple[float, float, float]) -> float:
     x1, y1, z1 = first_coord
@@ -35,11 +36,14 @@ def get_player_pos() -> None:
     print(f"Got a first tuple: {initial_coords}")
     x, y, z = initial_coords
     print(f"It includes: X={x}, Y={y}, Z={z}")
-    print(f"Distance to center: {calculate_distance(initial_coords, center_coordinate):.4f}\n")
+    print("Distance to center:",
+          f"{calculate_distance(initial_coords, center_coordinate):.4f}\n")
     print("Get a second set of coordinates")
     second_coords = get_coordinates()
-    print(f"Distance between the 2 sets of coordinates: {calculate_distance(initial_coords, second_coords):.4f}")
+    print("Distance between the 2 sets of coordinates:",
+          f"{calculate_distance(initial_coords, second_coords):.4f}")
 
-if __name__ == "__main==":
+
+if __name__ == "__main__":
     print("=== Game Coordinate System ===\n")
     get_player_pos()

@@ -1,5 +1,6 @@
 from sys import argv
 
+
 def main():
     print("=== Command Quest ===")
     argc = len(argv)

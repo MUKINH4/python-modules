@@ -23,6 +23,12 @@ def main() -> None:
     if missing:
         print("\nPlease install missing packages before continuing.")
         sys.exit(1)
+    else:
+        print("\npip vs Poetry:\n",
+                "requirements.txt declares what to install; pip resolves it at install time.\n",
+                "pyproject.toml declares the same constraints, and Poetry pins the resolved\n",
+                "versions in poetry.lock so every install is identical.\n")
+        print("All reagents present and accounted for.")
 
 
 if __name__ == "__main__":

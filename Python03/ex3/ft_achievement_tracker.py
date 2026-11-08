@@ -42,7 +42,10 @@ def main() -> None:
 
     for name, achievements in player_achievements.items():
         other_achievements: set[str] = set()
-        for other_name, other_player_achievements in player_achievements.items():
+        for (
+            other_name,
+            other_player_achievements,
+        ) in player_achievements.items():
             if other_name != name:
                 other_achievements = other_achievements.union(
                     other_player_achievements

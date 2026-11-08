@@ -54,7 +54,8 @@ def save_new_file(new_filename: str, content: str) -> int:
         file.close()
         return 1
     except OSError as error:
-        print(f"[STDERR] Error opening file'{new_filename}': {error}", file=stderr)
+        print(f"[STDERR] Error opening file'{new_filename}':",
+              f"{error}", file=stderr)
         return 0
 
 

@@ -1,5 +1,4 @@
 from sys import argv
-import typing
 
 
 def usage() -> None:
@@ -9,7 +8,7 @@ def usage() -> None:
 def open_file(filename: str):
     print(f"Accessing file: '{filename}'")
     try:
-        fd: typing.TextIOWrapper = open(filename)
+        fd = open(filename)
         content = fd.read()
         print("---\n")
         print(content)

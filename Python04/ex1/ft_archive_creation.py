@@ -18,7 +18,7 @@ def read_file(filename: str) -> str:
         return content
     except OSError as error:
         print(f"Error opening file'{filename}': {error}")
-        return None
+        return ""
 
 
 def transform_data(content: str) -> None:

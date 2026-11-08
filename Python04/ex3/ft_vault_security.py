@@ -1,4 +1,5 @@
-def secure_archive(file_name: str, action: str, content: str = "") -> tuple[bool, str]:
+def secure_archive(file_name: str, action: str,
+                   content: str = "") -> tuple[bool, str]:
     if action == "read":
         try:
             lines: str = ""
@@ -12,11 +13,12 @@ def secure_archive(file_name: str, action: str, content: str = "") -> tuple[bool
         try:
             with open(file_name, "w") as file:
                 file.write(content)
-            return tuple((True, "Content successfully written to file"))
+            return (True, "Content successfully written to file")
         except OSError as e:
             return (False, f"{e}")
     else:
         print("Invalid action or empty content!")
+    return (False, "Unknown Error")
 
 
 def main() -> None:

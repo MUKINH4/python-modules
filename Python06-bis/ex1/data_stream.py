@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Union
 
 class DataProcessor(ABC):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._storage: list[Any] = []
         self._rank_counter: int = 0
         self._total_processed: int = 0
@@ -20,9 +20,10 @@ class DataProcessor(ABC):
     def output(self) -> tuple[int, str]:
         if not self._storage:
             raise IndexError("No data to output")
-        self._rank_counter += 1
         item = self._storage.pop(0)
-        return (self._rank_counter, item)
+        rank = self._rank_counter
+        self._rank_counter += 1
+        return (rank, item)
 
 
 class NumericProcessor(DataProcessor):

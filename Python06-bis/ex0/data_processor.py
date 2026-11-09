@@ -4,7 +4,7 @@ from typing import Any, Union, List, Dict
 
 class DataProcessor(ABC):
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._storage: list[Any] = []
         self._rank_counter: int = 0
 
@@ -19,9 +19,10 @@ class DataProcessor(ABC):
     def output(self) -> tuple[int, str]:
         if not self._storage:
             raise IndexError("No data to output")
-        self._rank_counter += 1
         item = self._storage.pop(0)
-        return (self._rank_counter, item)
+        rank = self._rank_counter
+        self._rank_counter += 1
+        return (rank, item)
 
 
 class NumericProcessor(DataProcessor):
@@ -65,17 +66,23 @@ class TextProcessor(DataProcessor):
 class LogProcessor(DataProcessor):
 
     def validate(self, data: Any) -> bool:
-        def is_valid_dict(d: Any) -> bool:
-            if isinstance(d, dict):
-                for k, v in d.items():
-                    return all(isinstance(k, str)) and all(isinstance(v, str))
+        def is_valid_dict(value: Any) -> bool:
+            if not isinstance(value, dict) or not value:
+                return False
+            return all(
+                isinstance(key, str) and isinstance(item, str)
+                for key, item in value.items()
+            )
+
         if is_valid_dict(data):
             return True
-        if isinstance(data, dict):
-            return all(is_valid_dict(x) for x in data)
-        return False
+        return isinstance(data, list) and all(
+            is_valid_dict(item) for item in data
+        )
 
-    def ingest(self, data: Union[Dict[str, str], List[Dict[str, str]]]) -> None:
+    def ingest(
+        self, data: Union[Dict[str, str], List[Dict[str, str]]]
+    ) -> None:
         if not self.validate(data):
             raise ValueError("Improper log data")
 
